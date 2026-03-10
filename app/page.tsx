@@ -1,9 +1,51 @@
 import Navbar from "@/components/Navbar";
 import PropertyCard from "@/components/PropertyCard";
-import propertiesData from "@/lib/data/properties.json";
+import { supabase } from "@/lib/supabase";
+import { Property } from "@/lib/types";
+import Link from "next/link";
 
-export default function Home() {
-  const { featured, newInMarket } = propertiesData;
+// Server-side fetching functions
+async function getFeaturedProperties() {
+  const { data, error } = await supabase
+    .from('properties')
+    .select('*')
+    .eq('is_featured', true);
+  
+  if (error) {
+    console.error('Error fetching featured properties:', error);
+    return [];
+  }
+  return data as Property[];
+}
+
+async function getNewInMarketProperties(limit: number = 4) {
+  const { data, error, count } = await supabase
+    .from('properties')
+    .select('*', { count: 'exact' })
+    .eq('is_featured', false)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching new properties:', error);
+    return { data: [], count: 0 };
+  }
+  return { data: data as Property[], count: count || 0 };
+}
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ limit?: string }>;
+}) {
+  const params = await searchParams;
+  const limit = Number(params.limit) || 4;
+  const nextLimit = limit + 4;
+
+  const featured = await getFeaturedProperties();
+  const { data: newInMarket, count } = await getNewInMarketProperties(limit);
+  
+  const hasMore = count > limit;
 
   return (
     <div className="min-h-screen bg-clear-day">
@@ -72,9 +114,11 @@ export default function Home() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                     src={prop.image} 
                   />
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-nordic">
-                    {prop.tag}
-                  </div>
+                  {prop.tag && (
+                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-nordic">
+                      {prop.tag}
+                    </div>
+                  )}
                   <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-nordic hover:bg-mosque hover:text-white transition-all">
                     <span className="material-icons text-xl">favorite_border</span>
                   </button>
@@ -129,11 +173,17 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="mt-12 text-center">
-            <button className="px-8 py-3 bg-white border border-nordic/10 hover:border-mosque hover:text-mosque text-nordic font-medium rounded-lg transition-all hover:shadow-md">
-              Load more properties
-            </button>
-          </div>
+          {hasMore && (
+            <div className="mt-12 text-center">
+              <Link 
+                href={`/?limit=${nextLimit}`} 
+                scroll={false}
+                className="inline-block px-8 py-3 bg-white border border-nordic/10 hover:border-mosque hover:text-mosque text-nordic font-medium rounded-lg transition-all hover:shadow-md"
+              >
+                Load more properties
+              </Link>
+            </div>
+          )}
         </section>
       </main>
     </div>
