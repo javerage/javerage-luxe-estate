@@ -12,6 +12,10 @@ export default function LoginPage() {
       provider,
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: provider === 'google' ? {
+          prompt: 'select_account',
+          access_type: 'offline',
+        } : undefined,
       },
     })
   }

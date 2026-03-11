@@ -27,9 +27,12 @@ vamos a crear el diseño de nuestra funcionalidad de inicio de sesión basada en
 
 - Cuando el usuario que haya iniciado sesión cuente con un avatar de google o github, entonces este se debe mostrar en el navbar, por lo cual debes autorizar la fuente de imágenes desde GitHub y de Google para poder visualizar los avatar de los usuarios.
 
-- Implementa Google SignIn y Github SignIn basado en Supabase asegurate de usar context7 para garantizar seguir las prácticas recomendadas en la autenticación con estas funciones
+- Implementa Google SignIn y Github SignIn basado en Supabase asegurate de usar context7 para garantizar seguir las prácticas recomendadas en la autenticación con estas funciones, es importnte que verifiques la respuesta de ambos proveedores porque retornan diferentes nombres para los campos de respuesta.
+
+- En el proceso de autenticación evita usar el cache, siempre debes realizar la validación en fresco
 
 - Es fundamenteal que el diseño se alinee a los archivos @guidelines.md y @instructions.md para crear la página PropertyDetailsScreen la cual debe contener propiedades que se obtienen de la base de datos.
+
 ---
 
 We are developing a login functionality for our application, guided by the design in the image located at “@.gemini/resources/social_login_and_registration/screen.png”. Additionally, we will use the code from the file “@.gemini/resources/social_login_and_registration/code.html” as a foundation for the final implementation. It is essential to validate the use of components and generated code using the MCP Context7 framework. 
