@@ -17,9 +17,10 @@ interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export default async function AdminPropertiesPage({ searchParams }: PageProps) {
+export default async function AdminPropertiesPage(props: PageProps) {
+  const resolvedSearchParams = await props.searchParams
   const supabase = await createClient()
-  const resolvedSearchParams = await searchParams
+...
 
   // 1. Auth & Role Check
   const { data: { user }, error: authError } = await supabase.auth.getUser()
