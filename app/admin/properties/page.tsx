@@ -20,7 +20,6 @@ interface PageProps {
 export default async function AdminPropertiesPage(props: PageProps) {
   const resolvedSearchParams = await props.searchParams
   const supabase = await createClient()
-...
 
   // 1. Auth & Role Check
   const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -68,7 +67,7 @@ export default async function AdminPropertiesPage(props: PageProps) {
   const from = (page - 1) * PAGE_SIZE
   const to = from + PAGE_SIZE - 1
 
-  const { data: properties, count, error } = await query
+  const { data: properties, count } = await query
     .order('created_at', { ascending: false })
     .range(from, to)
 
