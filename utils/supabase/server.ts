@@ -17,14 +17,12 @@ export async function createClient() {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             )
-          } catch {
-            // The setAll method was called from a Server Component.
-            // This can be ignored if you have proxy refreshing
-            // the user session in the proxy.
+          } catch (error) {
+            // This is expected when called from a Server Component
+            // in certain Vercel environments.
           }
         },
       },
     }
   )
 }
-
