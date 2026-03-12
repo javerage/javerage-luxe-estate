@@ -23,3 +23,25 @@ The final outcome I want is a detailed proposal that includes:
 • Validation steps showing how skill-router supports your strategy
 
 This proposal will help our team at LUXU ESTATE enhance our property management capabilities while improving user experience.
+---
+
+te han pedido que implementes un acceso rápido a los dashboard aministrativos Cuando se presione la foto de pérfil del usuario en el navbar y el role del usuario sea Administrador, Vendedor o Agente Inmobiliario.
+
+utiliza skill-router para diseñar una estrategia que garantice la experiencia del usuario, debido a que solo los usuarios con un rol adminsitrativo pueden ver estos dashboard
+---
+
+When developing a new feature for our application, we have been tasked with implementing a quick access function to administrative dashboards. This feature should be triggered when a user clicks on their profile picture in the navigation bar. The access should only be available to users with administrative roles, specifically those designated as Administrator, Seller, or Real Estate Agent. It is crucial to ensure that only users with these roles can view the dashboards to maintain data security and a seamless user experience.
+
+I want you to design the access feature using skill-router. This should involve:
+1. Checking the user’s role when they click on their profile picture.
+2. If the role is one of the following: Administrator, Seller, or Real Estate Agent, redirect the user to the appropriate dashboard.
+3. If the user does not have an administrative role, display a friendly message indicating that access is restricted.
+4. Ensure the navigation experience is smooth and intuitive, so users can easily understand how to access their dashboards.
+
+The outcome I want here is a well-documented implementation plan that includes:
+- A flowchart or diagram illustrating the user interaction and decision-making process.
+- Sample code snippets showing how to implement the role-checking logic and redirection.
+- Clear instructions on how to integrate this feature into the existing application.
+- A brief overview of how this feature enhances user experience and security.
+
+This documentation will help our development team at LUXE ESTATE implement the feature effectively while ensuring a positive user experience.
