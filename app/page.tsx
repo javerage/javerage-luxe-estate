@@ -11,8 +11,7 @@ export const dynamic = 'force-dynamic';
 
 // Server-side fetching functions
 async function getFeaturedProperties() {
-...
-
+  const { data, error } = await supabase
     .from('properties')
     .select('*')
     .eq('is_featured', true)
@@ -93,7 +92,6 @@ export default async function Home({
   const tCommon = await getTranslations('Common');
   const tNavbar = await getTranslations('Navbar');
 
-  // Determine if any filter is active (ignoring the pagination limit)
   const isFiltered = Object.keys(params).some(key => 
     key !== 'limit' && params[key as keyof typeof params] !== undefined
   );
@@ -108,7 +106,6 @@ export default async function Home({
       <Navbar />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        {/* Hero Section */}
         <section className="py-12 md:py-16">
           <div className="max-w-3xl mx-auto text-center space-y-8">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-nordic leading-tight">
@@ -124,7 +121,6 @@ export default async function Home({
           </div>
         </section>
 
-        {/* Featured Collections - Hidden when filters are applied to focus on search results */}
         {!isFiltered && featured.length > 0 && (
           <section className="mb-16">
             <div className="flex items-end justify-between mb-8">
@@ -189,7 +185,6 @@ export default async function Home({
           </section>
         )}
 
-        {/* Results Section */}
         <section>
           <div className="flex items-end justify-between mb-8">
             <div>
