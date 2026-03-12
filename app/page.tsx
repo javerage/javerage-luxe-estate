@@ -11,7 +11,8 @@ async function getFeaturedProperties() {
   const { data, error } = await supabase
     .from('properties')
     .select('*')
-    .eq('is_featured', true);
+    .eq('is_featured', true)
+    .eq('status', 'Active');
   
   if (error) {
     console.error('Error fetching featured properties:', error);
@@ -25,6 +26,7 @@ async function getNewInMarketProperties(limit: number = 4, filters: any = {}) {
     .from('properties')
     .select('*', { count: 'exact' })
     .eq('is_featured', false)
+    .eq('status', 'Active')
     .order('created_at', { ascending: false });
 
   if (filters.query) {

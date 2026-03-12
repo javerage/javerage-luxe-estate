@@ -151,9 +151,10 @@ export default function PropertyForm({ initialData, isEdit = false }: PropertyFo
                   onChange={handleInputChange}
                   className="w-full px-4 py-2.5 rounded-md border-gray-200 focus:ring-1 focus:ring-[#006655] focus:border-[#006655] transition-all cursor-pointer"
                 >
-                  <option value="Active">Active</option>
+                  <option value="Active">Active (Online)</option>
                   <option value="Pending">Pending</option>
                   <option value="Sold">Sold</option>
+                  <option value="Archived">Archived (Offline)</option>
                 </select>
               </div>
               <div>

@@ -6,6 +6,8 @@ import AdminPropertyFilters from '@/components/AdminPropertyFilters'
 import Pagination from '@/components/Pagination'
 import { Property } from '@/lib/types'
 import Link from 'next/link'
+import VisibilityToggle from '@/components/VisibilityToggle'
+import { cn } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,6 +43,7 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
   const beds = parseInt((resolvedSearchParams.beds as string) || '0')
   const baths = parseInt((resolvedSearchParams.baths as string) || '0')
   const amenities = (resolvedSearchParams.amenities as string)?.split(',').filter(Boolean) || []
+  const filterStatus = (resolvedSearchParams.status as string) || ''
 
   // 3. Build Query
   let query = supabase
@@ -49,6 +52,9 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
 
   if (searchQuery) {
     query = query.or(`title.ilike.%${searchQuery}%,location.ilike.%${searchQuery}%`)
+  }
+  if (filterStatus) {
+    query = query.eq('status', filterStatus)
   }
   if (location) query = query.ilike('location', `%${location}%`)
   if (minPrice > 0) query = query.gte('price', minPrice)
@@ -128,7 +134,13 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
 
           <div className="divide-y divide-gray-100">
             {properties?.map((property: Property) => (
-              <div key={property.id} className="group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 hover:bg-[#EEF6F6]/50 transition-colors items-center">
+              <div 
+                key={property.id} 
+                className={cn(
+                  "group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 hover:bg-[#EEF6F6]/50 transition-colors items-center",
+                  property.status === 'Archived' && "bg-gray-50/50 opacity-75"
+                )}
+              >
                 <div className="col-span-12 md:col-span-6 flex gap-4 items-center">
                   <div className="relative h-20 w-28 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200">
                     <Image
@@ -137,6 +149,11 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
+                    {property.status === 'Archived' && (
+                      <div className="absolute inset-0 bg-nordic/40 flex items-center justify-center backdrop-blur-[1px]">
+                        <span className="text-[10px] font-bold text-white uppercase tracking-tighter border border-white/40 px-1.5 py-0.5 rounded">Archived</span>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <Link href={`/property/${property.slug}`} className="text-lg font-bold text-[#19322F] group-hover:text-[#006655] transition-colors cursor-pointer">
@@ -161,30 +178,38 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
                 </div>
 
                 <div className="col-span-6 md:col-span-2">
-                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
-                    property.status === 'Active' ? 'bg-[#D9ECC8] text-[#006655] border-[#006655]/10' :
-                    property.status === 'Pending' ? 'bg-orange-100 text-orange-700 border-orange-200' :
-                    'bg-gray-100 text-gray-600 border-gray-200'
-                  }`}>
-                    <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-                      property.status === 'Active' ? 'bg-[#006655]' :
-                      property.status === 'Pending' ? 'bg-orange-500' :
-                      'bg-gray-500'
-                    }`}></span>
+                  <span className={cn(
+                    "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border",
+                    property.status === 'Active' ? "bg-[#D9ECC8] text-[#006655] border-[#006655]/10" :
+                    property.status === 'Pending' ? "bg-orange-100 text-orange-700 border-orange-200" :
+                    property.status === 'Sold' ? "bg-blue-100 text-blue-700 border-blue-200" :
+                    "bg-gray-200 text-gray-600 border-gray-300"
+                  )}>
+                    <span className={cn(
+                      "w-1.5 h-1.5 rounded-full mr-1.5",
+                      property.status === 'Active' ? "bg-[#006655]" :
+                      property.status === 'Pending' ? "bg-orange-500" :
+                      property.status === 'Sold' ? "bg-blue-500" :
+                      "bg-gray-500"
+                    )}></span>
                     {property.status}
                   </span>
                 </div>
 
-                <div className="col-span-12 md:col-span-2 flex items-center justify-end gap-2">
-                  <Link 
-                    href={`/admin/properties/${property.id}/edit`}
-                    className="p-2 rounded-lg text-gray-400 hover:text-[#006655] hover:bg-[#D9ECC8]/30 transition-all"
-                  >
-                    <span className="material-icons text-xl">edit</span>
-                  </Link>
-                  <button className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all">
-                    <span className="material-icons text-xl">delete_outline</span>
-                  </button>
+                <div className="col-span-12 md:col-span-2 flex items-center justify-end gap-4">
+                  <VisibilityToggle 
+                    propertyId={property.id} 
+                    initialStatus={property.status} 
+                    title={property.title} 
+                  />
+                  <div className="flex items-center gap-1">
+                    <Link 
+                      href={`/admin/properties/${property.id}/edit`}
+                      className="p-2 rounded-lg text-gray-400 hover:text-[#006655] hover:bg-[#D9ECC8]/30 transition-all"
+                    >
+                      <span className="material-icons text-xl">edit</span>
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

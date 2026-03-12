@@ -12,6 +12,7 @@ async function getPropertyBySlug(slug: string) {
     .from('properties')
     .select('*')
     .eq('slug', slug)
+    .eq('status', 'Active')
     .single();
 
   if (error || !data) {

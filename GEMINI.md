@@ -2,6 +2,8 @@
 
 Luxe Estate is a high-performance, responsive real estate platform built with **Next.js 16** and **React 19**, leveraging modern architectural patterns and a premium design aesthetic.
 
+siempre debes utilizar skill-router para validar cuales son las mejores skill para ayudarnos en la tarea que se solicite.
+
 ## 🛠 Tech Stack
 
 - **Framework:** [Next.js 16](https://nextjs.org/) (App Router)

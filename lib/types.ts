@@ -14,9 +14,10 @@ export interface Property {
   is_featured: boolean;
   amenities: string[];
   created_at: string;
-  status: 'Active' | 'Pending' | 'Sold';
+  status: 'Active' | 'Pending' | 'Sold' | 'Archived';
   category: 'House' | 'Apartment' | 'Villa' | 'Penthouse' | 'Commercial';
   description?: string;
   year_built?: number;
   parking?: number;
+  owner_id?: string;
 }
