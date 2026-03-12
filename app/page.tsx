@@ -7,9 +7,12 @@ import HomeFilters from "@/components/HomeFilters";
 import { getTranslations } from 'next-intl/server';
 import Image from "next/image";
 
+export const dynamic = 'force-dynamic';
+
 // Server-side fetching functions
 async function getFeaturedProperties() {
-  const { data, error } = await supabase
+...
+
     .from('properties')
     .select('*')
     .eq('is_featured', true)
