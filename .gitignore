@@ -22,8 +22,10 @@
 ...
 
 # Agent & AI config
+.agent/
 .agents/
 .gemini/
+skills-lock.json
 .env
 .env*.local
 
